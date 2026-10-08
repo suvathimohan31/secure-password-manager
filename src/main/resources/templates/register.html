@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Create account · Secure Vault</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body>
+<main class="card">
+    <p class="eyebrow">SECURE VAULT</p>
+    <h1>Create your account</h1>
+    <p class="muted">Choose a strong master password and keep it safe.</p>
+
+    <form th:action="@{/register}" th:object="${form}" method="post">
+        <label for="email">Email</label>
+        <input id="email" th:field="*{email}" type="email" autocomplete="email" maxlength="254" required>
+        <p class="field-error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></p>
+
+        <label for="password">Master password</label>
+        <input id="password" name="password" type="password" autocomplete="new-password"
+               minlength="12" maxlength="72" required>
+        <p class="hint">Use at least 12 characters. Your master password is never stored in plain text.</p>
+        <p class="field-error" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></p>
+
+        <label for="confirmPassword">Confirm master password</label>
+        <input id="confirmPassword" name="confirmPassword" type="password"
+               autocomplete="new-password" required>
+        <p class="field-error" th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}"></p>
+
+        <button type="submit">Create account</button>
+    </form>
+    <p class="footnote">Already registered? <a th:href="@{/login}">Sign in</a></p>
+</main>
+</body>
+</html>

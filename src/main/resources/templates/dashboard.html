@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Dashboard · Secure Vault</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body>
+<main class="card">
+    <p class="eyebrow">SECURE VAULT</p>
+    <h1>Your account</h1>
+    <p class="muted">Signed in as <strong th:text="${email}">user@example.com</strong>.</p>
+    <p>Your encrypted vault is protected by a key derived from your master password.</p>
+    <p th:if="${vaultLocked}" class="notice">Unlock the vault to calculate your security score.</p>
+    <a class="button-link" th:if="${vaultLocked}" th:href="@{/vault/unlock}">Unlock vault</a>
+    <section class="score-card" th:if="${securityReport != null}">
+        <p class="eyebrow">VAULT SECURITY SCORE</p>
+        <p class="score"><span th:text="${securityReport.score}">0</span><small>/100</small></p>
+        <p class="muted" th:if="${securityReport.totalEntries == 0}">
+            Add credentials to calculate your score.
+        </p>
+        <ul class="warning-list" th:if="${securityReport.totalEntries > 0}">
+            <li th:text="${securityReport.weakCount} + ' weak password(s)'">0 weak passwords</li>
+            <li th:text="${securityReport.reusedCount} + ' reused password(s)'">0 reused passwords</li>
+            <li th:text="${securityReport.oldCount} + ' password(s) older than 90 days'">0 old passwords</li>
+        </ul>
+        <a th:href="@{/vault}">Open vault</a>
+    </section>
+    <form th:action="@{/logout}" method="post">
+        <button class="secondary" type="submit">Sign out</button>
+    </form>
+</main>
+</body>
+</html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Your vault · Secure Vault</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body>
+<main class="card wide-card">
+    <p class="eyebrow">SECURE VAULT</p>
+    <h1>Your credentials</h1>
+    <p class="muted">Entries are encrypted before they are written to the database.</p>
+    <div class="toolbar">
+        <a class="button-link" th:href="@{/vault/new}">Add credential</a>
+        <form class="inline-form" th:action="@{/vault/lock}" method="post">
+            <button class="secondary" type="submit">Lock vault</button>
+        </form>
+    </div>
+
+    <p class="muted" th:if="${#lists.isEmpty(entries)}">Your vault is empty. Add your first credential.</p>
+    <section class="entry" th:each="entry : ${entries}">
+        <div class="entry-heading">
+            <div>
+                <h2 th:text="${entry.site}">Example site</h2>
+                <p class="muted" th:text="${entry.username}">username</p>
+            </div>
+            <a th:href="@{/vault/{id}/edit(id=${entry.id})}">Edit</a>
+        </div>
+        <div class="badges">
+            <span class="badge weak" th:if="${securityReport.weakEntryIds.contains(entry.id)}">Weak</span>
+            <span class="badge warning" th:if="${securityReport.reusedEntryIds.contains(entry.id)}">Reused</span>
+            <span class="badge warning" th:if="${securityReport.oldEntryIds.contains(entry.id)}">Older than 90 days</span>
+        </div>
+        <details>
+            <summary>Show password</summary>
+            <code class="secret" th:text="${entry.password}">password</code>
+        </details>
+        <form class="inline-form" th:action="@{/vault/{id}/delete(id=${entry.id})}" method="post">
+            <button class="danger" type="submit">Delete</button>
+        </form>
+    </section>
+    <p class="footnote"><a th:href="@{/dashboard}">Back to account</a></p>
+</main>
+</body>
+</html>

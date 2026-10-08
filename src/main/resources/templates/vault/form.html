@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="${heading} + ' · Secure Vault'">Credential · Secure Vault</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body>
+<main class="card">
+    <p class="eyebrow">SECURE VAULT</p>
+    <h1 th:text="${heading}">Credential</h1>
+    <form th:action="${action}" th:object="${form}" method="post">
+        <label for="site">Website or service</label>
+        <input id="site" th:field="*{site}" maxlength="2048" autocomplete="url" required>
+        <p class="field-error" th:if="${#fields.hasErrors('site')}" th:errors="*{site}"></p>
+
+        <label for="username">Username</label>
+        <input id="username" name="username" th:value="${form.username}"
+               maxlength="254" autocomplete="username" required>
+        <p class="field-error" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></p>
+
+        <label for="password">Password</label>
+        <input id="password" name="password" type="password" maxlength="2048"
+               autocomplete="new-password" required>
+        <p class="field-error" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></p>
+        <div class="generator">
+            <label for="generatorLength">Generated password length</label>
+            <input id="generatorLength" type="number" min="16" max="64" value="20">
+            <button id="generatePassword" class="secondary" type="button">Generate password</button>
+            <label for="strengthMeter">Password strength</label>
+            <progress id="strengthMeter" max="3" value="0"></progress>
+            <p id="strengthLabel" class="muted" aria-live="polite">Enter a password to check its strength.</p>
+            <p id="generatorError" class="field-error" role="alert"></p>
+        </div>
+
+        <button type="submit">Save encrypted credential</button>
+    </form>
+    <p class="footnote"><a th:href="@{/vault}">Cancel and return to vault</a></p>
+</main>
+<script th:src="@{/js/password-tools.js}" defer></script>
+</body>
+</html>
